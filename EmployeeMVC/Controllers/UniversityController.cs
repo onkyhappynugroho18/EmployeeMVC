@@ -27,13 +27,6 @@ public class UniversityController : Controller
     }
     public IActionResult Create()
     {
-        //var universities = context.Universities.ToList()
-        //    .Select(u => new SelectListItem
-        //    {
-        //        Value = u.Id.ToString(),
-        //        Text = u.Name
-        //    });
-        //context.Universities.ToList();
         return View();
     }
     [HttpPost]
@@ -42,7 +35,9 @@ public class UniversityController : Controller
     {
         var result = repository.Insert(university);
         if (result > 0)
+        {
             return RedirectToAction(nameof(Index));
+        }
         return View();
     }
     public IActionResult Edit(int id)

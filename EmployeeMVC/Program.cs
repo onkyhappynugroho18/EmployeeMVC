@@ -1,4 +1,5 @@
 using EmployeeMVC.Contexts;
+using EmployeeMVC.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

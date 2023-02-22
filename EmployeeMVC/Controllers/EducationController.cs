@@ -1,5 +1,6 @@
 ﻿using EmployeeMVC.Contexts;
 using EmployeeMVC.Models;
+using EmployeeMVC.Repositories;
 using EmployeeMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,24 +17,12 @@ public class EducationController : Controller
     }
     public IActionResult Index()
     {
-        var results = context.Educations.Join(
-            context.Universities,
-            e => e.UniversityId,
-            u => u.Id,
-            (e, u) => new EducationVM
-            {
-                Id = e.Id,
-                Degree = e.Degree,
-                Gpa = e.Gpa,
-                Major = e.Major,
-                UniversityName = u.Name
-            });
-        return View(results);
+        var results = 
     }
     public IActionResult Details(int id)
     {
         var educations = context.Educations.Find(id);
-        return View(new EducationVM
+        return View(new EducationUniversityVM
         {
             Id = educations.Id,
             Degree = educations.Degree,
@@ -55,7 +44,7 @@ public class EducationController : Controller
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(EducationVM education)
+    public IActionResult Create(EducationUniversityVM education)
     {
         context.Add(new Education
         {

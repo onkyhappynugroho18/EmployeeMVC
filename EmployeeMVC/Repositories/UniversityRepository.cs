@@ -46,11 +46,6 @@ public class UniversityRepository : IRepository<int, University>
     public int Update(University entity)
     {
         int result = 0;
-        var getEntity = GetById(entity.Id);
-            if (getEntity == null)
-        {
-            return result;
-        }
         context.Entry(entity).State = EntityState.Modified;
         result = context.SaveChanges();
         return result;
