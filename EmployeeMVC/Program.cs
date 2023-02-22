@@ -10,6 +10,9 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("Connection");
 builder.Services.AddDbContext<MyContext>(options => options.UseSqlServer(connectionString));
 
+// Dependency Injection
+builder.Services.AddScoped<UniversityRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

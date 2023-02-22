@@ -22,7 +22,7 @@ public class EmployeeController : Controller
             FirstName = e.FirstName,
             LastName = e.LastName,
             Birthdate = e.Birthdate,
-            Gender = (ViewModels.GenderEnum)e.Gender,
+            Gender = e.Gender,
             HiringDate = e.HiringDate,
             Email = e.Email,
             PhoneNumber = e.PhoneNumber
@@ -40,7 +40,7 @@ public class EmployeeController : Controller
             FirstName = employee.FirstName,
             LastName = employee.LastName,
             Birthdate = employee.Birthdate,
-            Gender = (ViewModels.GenderEnum)employee.Gender,
+            Gender = employee.Gender,
             HiringDate = employee.HiringDate,
             Email = employee.Email,
             PhoneNumber = employee.PhoneNumber
@@ -84,7 +84,7 @@ public class EmployeeController : Controller
             FirstName = employee.FirstName,
             LastName = employee.LastName,
             Birthdate = employee.Birthdate,
-            Gender = (ViewModels.GenderEnum)employee.Gender,
+            Gender = employee.Gender,
             HiringDate = employee.HiringDate,
             Email = employee.Email,
             PhoneNumber = employee.PhoneNumber
@@ -101,7 +101,7 @@ public class EmployeeController : Controller
             FirstName = employee.FirstName,
             LastName = employee.LastName,
             Birthdate = employee.Birthdate,
-            Gender = (Models.GenderEnum)employee.Gender,
+            Gender = employee.Gender,
             HiringDate = employee.HiringDate,
             Email = employee.Email,
             PhoneNumber = employee.PhoneNumber
@@ -122,7 +122,7 @@ public class EmployeeController : Controller
             FirstName = employee.FirstName,
             LastName = employee.LastName,
             Birthdate = employee.Birthdate,
-            Gender = (ViewModels.GenderEnum)employee.Gender,
+            Gender = employee.Gender,
             HiringDate = employee.HiringDate,
             Email = employee.Email,
             PhoneNumber = employee.PhoneNumber

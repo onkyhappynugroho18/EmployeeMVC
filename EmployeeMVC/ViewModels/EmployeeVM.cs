@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EmployeeMVC.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
 namespace EmployeeMVC.ViewModels;
@@ -21,15 +22,10 @@ public class EmployeeVM
 
     [Display(Name = "Hiring Date")]
     public DateTime HiringDate { get; set; }
-
+    [EmailAddress]
     public string Email { get; set; }
 
-    [Display(Name = "Phone Number")]
+    [Phone, Display(Name = "Phone Number")]
     public string PhoneNumber { get; set; }
 }
 
-public enum GenderEnum
-{
-    Male,
-    Female
-}

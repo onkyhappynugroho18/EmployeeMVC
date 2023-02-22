@@ -28,12 +28,12 @@
                 @Html.DisplayFor(modelItem => item.Password)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Employee.NIK)
+                @Html.DisplayFor(modelItem => item.Employee.Email)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.EmployeeNIK">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EmployeeNIK">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EmployeeNIK">Delete</a>
+                <a asp-action="Edit" asp-route-NIK="@item.EmployeeNIK">Edit</a> |
+                <a asp-action="Details" asp-route-NIK="@item.EmployeeNIK">Details</a> |
+                <a asp-action="Delete" asp-route-NIK="@item.EmployeeNIK">Delete</a>
             </td>
         </tr>
 }
