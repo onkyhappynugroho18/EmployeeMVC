@@ -1,50 +1,34 @@
 ﻿using EmployeeMVC.Contexts;
 using EmployeeMVC.Models;
+using EmployeeMVC.Repositories;
 using EmployeeMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 
 namespace EmployeeMVC.Controllers;
 
 public class EmployeeController : Controller
 {
     private readonly MyContext context;
-    public EmployeeController(MyContext context)
+    private readonly EmployeeRepository employeeRepository;
+    public EmployeeController(MyContext context, EmployeeRepository employeeRepository)
     {
         this.context = context;
+        this.employeeRepository = employeeRepository;
     }
     public IActionResult Index()
     {
-        var employee = context.Employees.Select(e => new EmployeeVM
-        {
-            NIK = e.NIK,
-            FirstName = e.FirstName,
-            LastName = e.LastName,
-            Birthdate = e.Birthdate,
-            Gender = e.Gender,
-            HiringDate = e.HiringDate,
-            Email = e.Email,
-            PhoneNumber = e.PhoneNumber
-        }).ToList();
+        var employee = employeeRepository.GetEmployee();
         return View(employee);
     }
 
     //Get
     public IActionResult Details(string NIK)
     {
-        var employee = context.Employees.Find(NIK);
-        return View(new EmployeeVM
-        {
-            NIK = employee.NIK,
-            FirstName = employee.FirstName,
-            LastName = employee.LastName,
-            Birthdate = employee.Birthdate,
-            Gender = employee.Gender,
-            HiringDate = employee.HiringDate,
-            Email = employee.Email,
-            PhoneNumber = employee.PhoneNumber
-        });
+        var employee = employeeRepository.GetEmployeeById(NIK);
+        return View(employee);
     }
 
     //Get
