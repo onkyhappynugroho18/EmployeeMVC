@@ -32,7 +32,7 @@ public class EducationController : Controller
     }
     public IActionResult Create()
     {
-        var universities = context.Universities.ToList()
+        var universities = universityRepository.GetAll()
             .Select(u => new SelectListItem
             {
                 Value = u.Id.ToString(),
@@ -45,7 +45,7 @@ public class EducationController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(EducationUniversityVM education)
     {
-        context.Add(new Education
+        var result = repository.Insert(new Education
         {
             Id = education.Id,
             Degree = education.Degree,
@@ -53,7 +53,6 @@ public class EducationController : Controller
             Major = education.Major,
             UniversityId = Convert.ToInt16(education.UniversityName)
         });
-        var result = context.SaveChanges();
         if (result > 0)
             return RedirectToAction(nameof(Index));
         return View();

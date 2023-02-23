@@ -20,15 +20,36 @@ public class EmployeeController : Controller
     }
     public IActionResult Index()
     {
-        var employee = employeeRepository.GetEmployee();
+        var employee = employeeRepository.GetAll()
+            .Select(e => new EmployeeVM
+            {
+                NIK = e.NIK,
+                Email = e.Email,
+                Birthdate = e.Birthdate,
+                FirstName = e.FirstName,
+                LastName = e.LastName,
+                Gender = e.Gender,
+                HiringDate = e.HiringDate,
+                PhoneNumber = e.PhoneNumber
+            }).ToList();
         return View(employee);
     }
 
     //Get
     public IActionResult Details(string NIK)
     {
-        var employee = employeeRepository.GetEmployeeById(NIK);
-        return View(employee);
+        var employee = employeeRepository.GetById(NIK);
+        return View(new EmployeeVM
+        {
+            NIK = employee.NIK,
+            Email = employee.Email,
+            Birthdate = employee.Birthdate,
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
+            Gender = employee.Gender,
+            HiringDate = employee.HiringDate,
+            PhoneNumber = employee.PhoneNumber
+        });
     }
 
     //Get
@@ -41,7 +62,7 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(EmployeeVM employee)
     {
-        context.Add(new Employee
+        var result = employeeRepository.Insert(new Employee
         {
             NIK = employee.NIK,
             FirstName = employee.FirstName,
@@ -52,7 +73,6 @@ public class EmployeeController : Controller
             Email = employee.Email,
             PhoneNumber = employee.PhoneNumber
         });
-        var result = context.SaveChanges();
         if (result > 0)
             return RedirectToAction(nameof(Index));
         return View();
@@ -79,7 +99,7 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Edit(EmployeeVM employee)
     {
-        context.Entry(new Employee
+        var result = employeeRepository.Update(new Employee
         {
             NIK = employee.NIK,
             FirstName = employee.FirstName,
@@ -89,8 +109,7 @@ public class EmployeeController : Controller
             HiringDate = employee.HiringDate,
             Email = employee.Email,
             PhoneNumber = employee.PhoneNumber
-        }).State = EntityState.Modified;
-        var result = context.SaveChanges();
+        });
         if (result > 0)
         {
             return RedirectToAction(nameof(Index));
@@ -99,7 +118,7 @@ public class EmployeeController : Controller
     }
     public IActionResult Delete(string NIK)
     {
-        var employee = context.Employees.Find(NIK);
+        var employee = employeeRepository.GetById(NIK);
         return View(new EmployeeVM
         {
             NIK = employee.NIK,
@@ -117,9 +136,7 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Remove(string NIK)
     {
-        var employee = context.Employees.Find(NIK);
-        context.Remove(employee);
-        var result = context.SaveChanges();
+        var result = employeeRepository.Delete(NIK);
         if (result > 0)
         {
             return RedirectToAction(nameof(Index));

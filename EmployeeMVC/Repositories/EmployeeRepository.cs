@@ -2,27 +2,22 @@
 using EmployeeMVC.Models;
 using EmployeeMVC.Repositories.Interface;
 using EmployeeMVC.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeMVC.Repositories;
 
-public class EmployeeRepository : IRepository<int, Employee>
+public class EmployeeRepository : IRepository<string, Employee>
 {
     private MyContext context;
     public EmployeeRepository(MyContext context)
     {
         this.context = context;
     }
-    public int Delete(int key)
+    public int Delete(string key)
     {
-        int result = 0;
-        var employee = GetById(key);
-        if (employee == null)
-        {
-            return result;
-        }
-        context.Remove(employee);
-        result = context.SaveChanges();
-        return result;
+        var entity = GetById(key);
+        context.Remove(entity);
+        return context.SaveChanges();
     }
 
     public List<Employee> GetAll()
@@ -30,52 +25,22 @@ public class EmployeeRepository : IRepository<int, Employee>
         return context.Employees.ToList() ?? null;
     }
 
-    public Employee GetById(int key)
+    public Employee GetById(string key)
     {
-        return context.Employees.Find(key) ?? null;;
+        return context.Employees.Find(key) ?? null;
     }
 
     public int Insert(Employee entity)
     {
-        throw new NotImplementedException();
+        int result = 0;
+        context.Add(entity);
+        result = context.SaveChanges();
+        return result;
     }
 
     public int Update(Employee entity)
     {
-        throw new NotImplementedException();
+        var result = context.Entry(entity).State = EntityState.Modified;
+        return context.SaveChanges();
     }
-
-    public List<EmployeeVM> GetEmployee()
-    {
-
-        var results = context.Employees.Select(e => new EmployeeVM
-        {
-            NIK = e.NIK,
-            FirstName = e.FirstName,
-            LastName = e.LastName,
-            Birthdate = e.Birthdate,
-            Gender = e.Gender,
-            HiringDate = e.HiringDate,
-            Email = e.Email,
-            PhoneNumber = e.PhoneNumber
-        }).ToList();
-        return results;
-    }
-    public EmployeeVM GetEmployeeById(int key)
-    {
-        var e = GetById(key);
-        var results = new EmployeeVM
-        {
-            NIK = e.NIK,
-            FirstName = e.FirstName,
-            LastName = e.LastName,
-            Birthdate = e.Birthdate,
-            Gender = e.Gender,
-            HiringDate = e.HiringDate,
-            Email = e.Email,
-            PhoneNumber = e.PhoneNumber
-        };
-        return results;
-    }
-
 }
