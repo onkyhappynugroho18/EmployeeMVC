@@ -1,5 +1,6 @@
 ﻿using EmployeeMVC.Contexts;
 using EmployeeMVC.Models;
+using EmployeeMVC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,38 +9,78 @@ namespace EmployeeMVC.Controllers;
 public class RoleController : Controller
 {
     private readonly MyContext context;
-    public RoleController(MyContext context)
+    private readonly RoleRepository roleRepository;
+    public RoleController(MyContext context, RoleRepository roleRepository)
     {
         this.context = context;
+        this.roleRepository = roleRepository;
     }
     public IActionResult Index()
     {
-        var role = context.Roles.ToList();
+        if (HttpContext.Session.GetString("email") == null)
+        {
+            return RedirectToAction("Unauthorized", "Error");
+        }
+        if (HttpContext.Session.GetString("role") != "Admin")
+        {
+            return RedirectToAction("Forbidden", "Error");
+        }
+        var role = roleRepository.GetAll();
         return View(role);
     }
     public IActionResult Details(int id)
     {
-        var role = context.Roles.Find(id);
+        if (HttpContext.Session.GetString("email") == null)
+        {
+            return RedirectToAction("Unauthorized", "Error");
+        }
+        if (HttpContext.Session.GetString("role") != "Admin")
+        {
+            return RedirectToAction("Forbidden", "Error");
+        }
+        var role = roleRepository.GetById(id);
         return View(role);
     }
     public IActionResult Create()
     {
-        context.Roles.ToList();
+        if (HttpContext.Session.GetString("email") == null)
+        {
+            return RedirectToAction("Unauthorized", "Error");
+        }
+        if (HttpContext.Session.GetString("role") != "Admin")
+        {
+            return RedirectToAction("Forbidden", "Error");
+        }
         return View();
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Role role)
     {
-        context.Add(role);
-        var result = context.SaveChanges();
+        if (HttpContext.Session.GetString("email") == null)
+        {
+            return RedirectToAction("Unauthorized", "Error");
+        }
+        if (HttpContext.Session.GetString("role") != "Admin")
+        {
+            return RedirectToAction("Forbidden", "Error");
+        }
+        var result = roleRepository.Insert(role);
         if (result > 0)
             return RedirectToAction(nameof(Index));
         return View();
     }
     public IActionResult Edit(int id)
     {
-        var role = context.Roles.Find(id);
+        if (HttpContext.Session.GetString("email") == null)
+        {
+            return RedirectToAction("Unauthorized", "Error");
+        }
+        if (HttpContext.Session.GetString("role") != "Admin")
+        {
+            return RedirectToAction("Forbidden", "Error");
+        }
+        var role = roleRepository.GetById(id);
         return View(role);
     }
 
@@ -47,8 +88,15 @@ public class RoleController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Edit(Role role)
     {
-        context.Entry(role).State = EntityState.Modified;
-        var result = context.SaveChanges();
+        if (HttpContext.Session.GetString("email") == null)
+        {
+            return RedirectToAction("Unauthorized", "Error");
+        }
+        if (HttpContext.Session.GetString("role") != "Admin")
+        {
+            return RedirectToAction("Forbidden", "Error");
+        }
+        var result = roleRepository.Update(role);
         if (result > 0)
         {
             return RedirectToAction(nameof(Index));
@@ -57,7 +105,15 @@ public class RoleController : Controller
     }
     public IActionResult Delete(int id)
     {
-        var role = context.Roles.Find(id);
+        if (HttpContext.Session.GetString("email") == null)
+        {
+            return RedirectToAction("Unauthorized", "Error");
+        }
+        if (HttpContext.Session.GetString("role") != "Admin")
+        {
+            return RedirectToAction("Forbidden", "Error");
+        }
+        var role = roleRepository.GetById(id);
         return View(role);
     }
 
@@ -65,9 +121,15 @@ public class RoleController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Remove(int id)
     {
-        var role = context.Roles.Find(id);
-        context.Remove(role);
-        var result = context.SaveChanges();
+        if (HttpContext.Session.GetString("email") == null)
+        {
+            return RedirectToAction("Unauthorized", "Error");
+        }
+        if (HttpContext.Session.GetString("role") != "Admin")
+        {
+            return RedirectToAction("Forbidden", "Error");
+        }
+        var result = roleRepository.Delete(id);
         if (result > 0)
         {
             return RedirectToAction(nameof(Index));

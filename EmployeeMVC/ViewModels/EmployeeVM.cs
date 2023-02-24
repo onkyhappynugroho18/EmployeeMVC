@@ -26,6 +26,6 @@ public class EmployeeVM
     public string Email { get; set; }
 
     [Phone, Display(Name = "Phone Number")]
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 }
 
