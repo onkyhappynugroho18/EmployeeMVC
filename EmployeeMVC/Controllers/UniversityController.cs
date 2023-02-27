@@ -9,7 +9,6 @@ using NuGet.Protocol.Core.Types;
 
 namespace EmployeeMVC.Controllers;
 
-[Authorize]
 public class UniversityController : Controller
 {
     private readonly UniversityRepository repository;
@@ -21,20 +20,20 @@ public class UniversityController : Controller
     [Authorize]
     public IActionResult Index()
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
         var universities = repository.GetAll();
         return View(universities);
     }
     [Authorize]
     public IActionResult Details(int id)
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
         var university = repository.GetById(id);
         return View(university);
     }
