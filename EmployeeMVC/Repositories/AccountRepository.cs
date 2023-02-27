@@ -108,7 +108,7 @@ public class AccountRepository : IRepository<int, Account>
         AccountRole accountRole = new AccountRole
         {
             AccountNIK = registerVM.NIK,
-            RoleId = 1
+            RoleId = 2
         };
 
         context.AccountRoles.Add(accountRole);
@@ -157,11 +157,21 @@ public class AccountRepository : IRepository<int, Account>
                         select new UserdataVM
                         {
                             Email = e.Email,
-                            FullName = String.Concat(e.FirstName, " ", e.LastName),
-                            Role = r.Name
+                            FullName = String.Concat(e.FirstName, " ", e.LastName)
+                            //Role = r.Name
                         }).FirstOrDefault();
 
         return userdata;
+    }
+
+    public List<string> GetRolesByNIK(string email)
+    {
+        var getNIK = context.Employees.FirstOrDefault(e => e.Email == email);
+        return context.AccountRoles.Where(ar => ar.AccountNIK == getNIK.NIK)
+            .Join(context.Roles,
+            ar => ar.RoleId,
+            r => r.Id,
+            (ar, r) => r.Name).ToList();
     }
 
 }

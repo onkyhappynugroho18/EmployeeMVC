@@ -2,6 +2,7 @@
 using EmployeeMVC.Models;
 using EmployeeMVC.Repositories;
 using EmployeeMVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,25 +10,24 @@ using NuGet.Protocol.Core.Types;
 
 namespace EmployeeMVC.Controllers;
 
+[Authorize(Roles = "Admin")]
 public class EmployeeController : Controller
 {
-    private readonly MyContext context;
     private readonly EmployeeRepository employeeRepository;
     public EmployeeController(MyContext context, EmployeeRepository employeeRepository)
     {
-        this.context = context;
         this.employeeRepository = employeeRepository;
     }
     public IActionResult Index()
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
-        if (HttpContext.Session.GetString("role") != "Admin")
-        {
-            return RedirectToAction("Forbidden", "Error");
-        }
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
+        //if (HttpContext.Session.GetString("role") != "Admin")
+        //{
+        //    return RedirectToAction("Forbidden", "Error");
+        //}
         var employee = employeeRepository.GetAll()
             .Select(e => new EmployeeVM
             {
@@ -46,14 +46,14 @@ public class EmployeeController : Controller
     //Get
     public IActionResult Details(string NIK)
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
-        if (HttpContext.Session.GetString("role") != "Admin")
-        {
-            return RedirectToAction("Forbidden", "Error");
-        }
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
+        //if (HttpContext.Session.GetString("role") != "Admin")
+        //{
+        //    return RedirectToAction("Forbidden", "Error");
+        //}
         var employee = employeeRepository.GetById(NIK);
         return View(new EmployeeVM
         {
@@ -71,14 +71,14 @@ public class EmployeeController : Controller
     //Get
     public IActionResult Create()
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
-        if (HttpContext.Session.GetString("role") != "Admin")
-        {
-            return RedirectToAction("Forbidden", "Error");
-        }
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
+        //if (HttpContext.Session.GetString("role") != "Admin")
+        //{
+        //    return RedirectToAction("Forbidden", "Error");
+        //}
         return View();
     }
 
@@ -86,14 +86,14 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(EmployeeVM employee)
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
-        if (HttpContext.Session.GetString("role") != "Admin")
-        {
-            return RedirectToAction("Forbidden", "Error");
-        }
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
+        //if (HttpContext.Session.GetString("role") != "Admin")
+        //{
+        //    return RedirectToAction("Forbidden", "Error");
+        //}
         var result = employeeRepository.Insert(new Employee
         {
             NIK = employee.NIK,
@@ -113,15 +113,15 @@ public class EmployeeController : Controller
     //Get
     public IActionResult Edit(string NIK)
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
-        if (HttpContext.Session.GetString("role") != "Admin")
-        {
-            return RedirectToAction("Forbidden", "Error");
-        }
-        var employee = context.Employees.Find(NIK);
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
+        //if (HttpContext.Session.GetString("role") != "Admin")
+        //{
+        //    return RedirectToAction("Forbidden", "Error");
+        //}
+        var employee = employeeRepository.GetById(NIK);
         return View(new EmployeeVM
         {
             NIK = employee.NIK,
@@ -139,14 +139,14 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Edit(EmployeeVM employee)
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
-        if (HttpContext.Session.GetString("role") != "Admin")
-        {
-            return RedirectToAction("Forbidden", "Error");
-        }
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
+        //if (HttpContext.Session.GetString("role") != "Admin")
+        //{
+        //    return RedirectToAction("Forbidden", "Error");
+        //}
         var result = employeeRepository.Update(new Employee
         {
             NIK = employee.NIK,
@@ -164,16 +164,17 @@ public class EmployeeController : Controller
         }
         return View();
     }
+
     public IActionResult Delete(string NIK)
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
-        if (HttpContext.Session.GetString("role") != "Admin")
-        {
-            return RedirectToAction("Forbidden", "Error");
-        }
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
+        //if (HttpContext.Session.GetString("role") != "Admin")
+        //{
+        //    return RedirectToAction("Forbidden", "Error");
+        //}
         var employee = employeeRepository.GetById(NIK);
         return View(new EmployeeVM
         {
@@ -192,14 +193,14 @@ public class EmployeeController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Remove(string NIK)
     {
-        if (HttpContext.Session.GetString("email") == null)
-        {
-            return RedirectToAction("Unauthorized", "Error");
-        }
-        if (HttpContext.Session.GetString("role") != "Admin")
-        {
-            return RedirectToAction("Forbidden", "Error");
-        }
+        //if (HttpContext.Session.GetString("email") == null)
+        //{
+        //    return RedirectToAction("Unauthorized", "Error");
+        //}
+        //if (HttpContext.Session.GetString("role") != "Admin")
+        //{
+        //    return RedirectToAction("Forbidden", "Error");
+        //}
         var result = employeeRepository.Delete(NIK);
         if (result > 0)
         {
